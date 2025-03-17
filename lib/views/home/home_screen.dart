@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:oneroof/utility/colors.dart';
+import 'package:oneroof/views/flight/form/flight_form.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -79,9 +82,18 @@ class _HomePageState extends State<HomePage>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildTravelOption('Flights', Icons.flight, Colors.pink),
-                  _buildTravelOption('Hotels', Icons.hotel, Colors.pink),
-                  _buildTravelOption('Trains', Icons.train, Colors.pink),
+                  GestureDetector(
+                    onTap: (){
+                      Get.to(()=>FlightBookingScreen());
+                    },
+                    child: _buildTravelOption(
+                      'Flights',
+                      Icons.flight,
+                      TColors.secondary,
+                    ),
+                  ),
+                  _buildTravelOption('Hotels', Icons.hotel, TColors.secondary),
+                  _buildTravelOption('Trains', Icons.train, TColors.secondary),
                 ],
               ),
             ),
@@ -151,10 +163,7 @@ class _HomePageState extends State<HomePage>
                           ),
                           Text(
                             'SALE EXTENDED',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                            ),
+                            style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
                         ],
                       ),
@@ -162,8 +171,8 @@ class _HomePageState extends State<HomePage>
                   ),
                   Expanded(
                     flex: 2,
-                    child: Image.network(
-                      'https://via.placeholder.com/150',
+                    child: Image.asset(
+                      'assets/images/pkg.png',
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -190,16 +199,16 @@ class _HomePageState extends State<HomePage>
                             ),
                           ),
                           SizedBox(width: 5),
-                          Icon(Icons.arrow_forward,
-                              size: 18, color: Colors.purple),
+                          Icon(
+                            Icons.arrow_forward,
+                            size: 18,
+                            color: Colors.purple,
+                          ),
                         ],
                       ),
                       Text(
                         'View All',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue,
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.blue),
                       ),
                     ],
                   ),
@@ -245,7 +254,7 @@ class _HomePageState extends State<HomePage>
                     ),
                   ),
                   Container(
-                    height: 200,
+                    height: 300,
                     child: TabBarView(
                       controller: _tabController,
                       children: [
@@ -283,16 +292,16 @@ class _HomePageState extends State<HomePage>
                             ),
                           ),
                           SizedBox(width: 5),
-                          Icon(Icons.arrow_forward,
-                              size: 18, color: Colors.purple),
+                          Icon(
+                            Icons.arrow_forward,
+                            size: 18,
+                            color: Colors.purple,
+                          ),
                         ],
                       ),
                       Text(
                         'Clear All',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue,
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.blue),
                       ),
                     ],
                   ),
@@ -338,10 +347,7 @@ class _HomePageState extends State<HomePage>
                       ),
                       Text(
                         'View All >',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue,
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.blue),
                       ),
                     ],
                   ),
@@ -350,7 +356,7 @@ class _HomePageState extends State<HomePage>
                     children: [
                       Expanded(
                         child: _buildBlogCard(
-                          'https://via.placeholder.com/200x150',
+                          'assets/images/pkg.png',
                           'Top 5 Winter Destinations Every Traveller must Explore',
                           '2 weeks ago',
                         ),
@@ -358,7 +364,7 @@ class _HomePageState extends State<HomePage>
                       SizedBox(width: 16),
                       Expanded(
                         child: _buildBlogCard(
-                          'https://via.placeholder.com/200x150',
+                          'assets/images/pkg.png',
                           'Top 5 Places to Visit in India to Experience Rural Life',
                           '3 weeks ago',
                         ),
@@ -377,10 +383,7 @@ class _HomePageState extends State<HomePage>
                 children: [
                   Text(
                     'Why Book With Us?',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 16),
                   _buildReasonCard(
@@ -443,20 +446,13 @@ class _HomePageState extends State<HomePage>
                 bottomRight: Radius.circular(12),
               ),
             ),
-            child: Icon(
-              icon,
-              color: color,
-              size: 30,
-            ),
+            child: Icon(icon, color: color, size: 30),
           ),
           SizedBox(height: 8),
           Text(
             title,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -470,22 +466,16 @@ class _HomePageState extends State<HomePage>
         Container(
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
+            color: TColors.secondary.withOpacity(0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            icon,
-            color: Colors.blue,
-            size: 24,
-          ),
+          child: Icon(icon, color: TColors.secondary, size: 24),
         ),
         SizedBox(height: 4),
         Text(
           title,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 10,
-          ),
+          style: TextStyle(fontSize: 10),
         ),
       ],
     );
@@ -494,13 +484,13 @@ class _HomePageState extends State<HomePage>
   Widget _buildSpecialOfferContent(String offerType) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16),
-      height: 280,
+      height: 400,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 5, // Number of cards you want to show
         itemBuilder: (context, index) {
           return Container(
-            width: 250,
+            width: 200,
             margin: EdgeInsets.only(right: 16),
             child: Card(
               elevation: 4,
@@ -511,10 +501,11 @@ class _HomePageState extends State<HomePage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(10)),
-                    child: Image.network(
-                      'https://via.placeholder.com/250x120',
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(10),
+                    ),
+                    child: Image.asset(
+                      'assets/images/pkg.png',
                       height: 120,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -527,16 +518,17 @@ class _HomePageState extends State<HomePage>
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.local_offer,
-                                color: Colors.blue, size: 20),
+                            Icon(
+                              Icons.local_offer,
+                              color: Colors.blue,
+                              size: 20,
+                            ),
                             SizedBox(width: 8),
                             Text(
                               offerType == 'Flight'
                                   ? 'Holi Day Travel Deals'
                                   : 'New User Offer',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -588,10 +580,7 @@ class _HomePageState extends State<HomePage>
               Expanded(
                 child: Text(
                   route,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
               ),
             ],
@@ -599,10 +588,7 @@ class _HomePageState extends State<HomePage>
           SizedBox(height: 4),
           Text(
             details,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
           ),
         ],
       ),
@@ -631,7 +617,7 @@ class _HomePageState extends State<HomePage>
               topLeft: Radius.circular(8),
               topRight: Radius.circular(8),
             ),
-            child: Image.network(
+            child: Image.asset(
               imageUrl,
               height: 120,
               width: double.infinity,
@@ -645,21 +631,12 @@ class _HomePageState extends State<HomePage>
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 8),
-                Text(
-                  date,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
+                Text(date, style: TextStyle(fontSize: 12, color: Colors.grey)),
               ],
             ),
           ),
@@ -674,14 +651,10 @@ class _HomePageState extends State<HomePage>
         Container(
           padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
+            color: TColors.secondary.withOpacity(0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            icon,
-            color: Colors.blue,
-            size: 24,
-          ),
+          child: Icon(icon, color: TColors.secondary, size: 24),
         ),
         SizedBox(width: 16),
         Expanded(
@@ -690,18 +663,12 @@ class _HomePageState extends State<HomePage>
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               ),
               SizedBox(height: 4),
               Text(
                 description,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
             ],
           ),
