@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/route_manager.dart';
 import 'package:oneroof/utility/colors.dart';
-import 'package:oneroof/views/flight/form/flight_form.dart';
+import 'package:oneroof/views/group_ticket/group_ticket.dart';
+import 'package:oneroof/views/hotel/hotel/hotel_form.dart';
 
-class HomePage extends StatefulWidget {
+import '../flight/form/flight_form.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
-  _HomePageState createState() => _HomePageState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage>
+class HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -84,16 +89,32 @@ class _HomePageState extends State<HomePage>
                 children: [
                   GestureDetector(
                     onTap: (){
-                      Get.to(()=>FlightBookingScreen());
-                    },
+                      Get.to(() => FlightBookingScreen());
+      },
                     child: _buildTravelOption(
                       'Flights',
                       Icons.flight,
                       TColors.secondary,
                     ),
                   ),
-                  _buildTravelOption('Hotels', Icons.hotel, TColors.secondary),
-                  _buildTravelOption('Trains', Icons.train, TColors.secondary),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => HotelFormScreen());
+                    },
+                    child: _buildTravelOption(
+                      'Hotels',
+                      Icons.hotel,
+                      TColors.secondary,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Get.to(() => GroupTicket()),
+                    child: _buildTravelOption(
+                      'Group Tickets',
+                      Icons.train,
+                      TColors.secondary,
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../widgets/colors.dart';
+
+import '../../../utility/colors.dart';
 import 'search_flight_utils/flight_controller.dart';
 import 'search_flight_utils/widgets/currency_dialog.dart';
 import 'search_flight_utils/widgets/flight_bottom_sheet.dart';
@@ -70,7 +71,7 @@ class FlightBookingPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: TColors.background2,
+      backgroundColor: TColors.background,
       appBar: AppBar(
         surfaceTintColor: TColors.background,
         backgroundColor: TColors.background,

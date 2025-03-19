@@ -61,25 +61,4 @@ class FlightDateController extends GetxController {
     }
   }
 
-  // Add new flight for multi-city
-
-  void addFlight({DateTime? initialDate}) {
-    flights.add({
-      'origin': '',
-      'destination': '',
-      'date': initialDate ?? DateTime.now()
-    });
-  }
-
-  // Remove flight from multi-city
-  void removeFlight(int index) {
-    if (flights.length > 2 && index < flights.length) {
-      flights.removeAt(index);
-    }
-  }
-
-  // Get minimum date for return flight selection
-  DateTime getMinReturnDate() {
-    return departureDate.value;
-  }
 }

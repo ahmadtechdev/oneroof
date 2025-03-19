@@ -51,7 +51,7 @@ class FlightBookingScreen extends StatelessWidget {
                     _buildMultiCitySelector(context),
 
                   const SizedBox(height: 16),
-                  _buildTravellerAndClassSelectors(),
+                  _buildTravellerAndClassSelectors(context),
                   const SizedBox(height: 24),
                   _buildSearchButton(),
                 ],
@@ -734,83 +734,88 @@ class FlightBookingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTravellerAndClassSelectors() {
+  Widget _buildTravellerAndClassSelectors(BuildContext context) {
     return Row(
       children: [
         Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: TColors.secondary),
-              color: TColors.secondary.withOpacity(0.1),
-
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'TRAVELLER(S)',
-                    style: TextStyle(
-                      color: TColors.grey,
-                      fontSize: 12,
+          child: GestureDetector(
+            onTap: () => controller.showTravelersSelectionBottomSheet(context),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: TColors.secondary),
+                color: TColors.secondary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'TRAVELLER(S)',
+                      style: TextStyle(
+                        color: TColors.grey,
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Obx(() => Text(
-                    '${controller.travellersCount.value} Traveller',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: TColors.text,
-                    ),
-                  )),
-                ],
+                    const SizedBox(height: 4),
+                    Obx(() => Text(
+                      '${controller.travellersCount.value} Traveller',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: TColors.text,
+                      ),
+                    )),
+                  ],
+                ),
               ),
             ),
           ),
         ),
         const SizedBox(width: 8),
         Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: TColors.secondary),
-              color: TColors.secondary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'CLASS',
-                    style: TextStyle(
-                      color: TColors.grey,
-                      fontSize: 12,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Obx(() => Text(
-                        controller.travelClass.value,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: TColors.text,
-                        ),
-                      )),
-                      Icon(
-                        Icons.keyboard_arrow_down,
+          child: GestureDetector(
+            onTap: () => controller.showClassSelectionBottomSheet(context),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: TColors.secondary),
+                color: TColors.secondary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'CLASS',
+                      style: TextStyle(
                         color: TColors.grey,
-                        size: 16,
+                        fontSize: 12,
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Obx(() => Text(
+                          controller.travelClass.value,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: TColors.text,
+                          ),
+                        )),
+                        Icon(
+                          Icons.keyboard_arrow_down,
+                          color: TColors.grey,
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

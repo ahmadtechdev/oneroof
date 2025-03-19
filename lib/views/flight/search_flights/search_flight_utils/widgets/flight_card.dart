@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:oneroof/views/flight/form/flight_booking_controller.dart';
 
 import '../../../../../services/api_service_flight.dart';
-import '../../../../../widgets/colors.dart';
+
+import '../../../../../utility/colors.dart';
 import '../../../form/controllers/flight_search_controller.dart';
 import '../filter_modal.dart';
 import '../flight_controller.dart';
@@ -50,7 +52,7 @@ class _FlightCardState extends State<FlightCard>
 
   // Calculate total layover time
 
-// Add this utility function to translate cabin codes
+  // Add this utility function to translate cabin codes
   String getCabinClassName(String cabinCode) {
     switch (cabinCode) {
       case 'F':
@@ -66,7 +68,7 @@ class _FlightCardState extends State<FlightCard>
     }
   }
 
-// Add this utility function for meal codes
+  // Add this utility function for meal codes
   String getMealInfo(String mealCode) {
     switch (mealCode.toUpperCase()) {
       case 'P':
@@ -132,15 +134,13 @@ class _FlightCardState extends State<FlightCard>
 
   @override
   Widget build(BuildContext context) {
-
-    Get.put(FlightSearchController());
+    Get.put(FlightBookingController());
     String formatTime(String time) {
       if (time.isEmpty) return 'N/A';
       return time.split(':').sublist(0, 2).join(':'); // Extract HH:mm
     }
 
     // Update these methods to handle the new DateTime format
-
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -164,79 +164,125 @@ class _FlightCardState extends State<FlightCard>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  children: [
+                    for (var legSchedule in widget.flight.legSchedules)
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: SizedBox(
+                          width: MediaQuery.sizeOf(context).width/0.7,
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    widget.flight.airline,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 2),
+                                  Text(
+                                    widget.flight.flightNumber,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: 6),
+
+                            ],
+                          ),
+                        ),
+                      ),
+                    Column(
+                      children: [
+                        GetX<FlightController>(
+                          builder:
+                              (controller) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: TColors.black.withOpacity(0.05),
+                              borderRadius: BorderRadius.circular(42),
+                              border: Border.all(
+                                color: TColors.black.withOpacity(0.3),
+                              ),
+                            ),
+                            child: Text(
+                              '${controller.selectedCurrency.value} ${widget.flight.price.toStringAsFixed(0)}',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: TColors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
 
                 for (var legSchedule in widget.flight.legSchedules)
                   SingleChildScrollView(
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-
-                            CachedNetworkImage(
-                              imageUrl: widget.flight.imgPath,
-                              height: 24,
-                              width: 24,
-                              placeholder: (context, url) => const SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: Center(
-                                  child: CircularProgressIndicator(strokeWidth: 2),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => CachedNetworkImage(
-                                imageUrl: 'https://cdn-icons-png.flaticon.com/128/15700/15700374.png',
-                                height: 24,
-                                width: 24,
-                                errorWidget: (context, url, error) => const Icon(Icons.flight, size: 24),
-                              ),
-                              fit: BoxFit.contain,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              widget.flight.airline,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            // Text(
-                            //   legSchedule['fareBasisCode'],
-                            //   style: const TextStyle(
-                            //     fontSize: 14,
-                            //     fontWeight: FontWeight.bold,
-                            //   ),
-                            //   overflow: TextOverflow.clip,
-                            // ),
-                            // const SizedBox(width: 8),
-                            // Text(
-                            //   widget.flight.flightNumber,
-                            //   style: const TextStyle(
-                            //     color: TColors.grey,
-                            //     fontSize: 14,
-                            //   ),
-                            // ),
-                          ],
-                        ),
                         const SizedBox(height: 16),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              CachedNetworkImage(
+                                imageUrl: widget.flight.imgPath,
+                                height: 32,
+                                width: 32,
+                                placeholder:
+                                    (context, url) => const SizedBox(
+                                      height: 24,
+                                      width: 24,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
+                                      ),
+                                    ),
+                                errorWidget:
+                                    (context, url, error) => CachedNetworkImage(
+                                      imageUrl:
+                                          'https://cdn-icons-png.flaticon.com/128/15700/15700374.png',
+                                      height: 24,
+                                      width: 24,
+                                      errorWidget:
+                                          (context, url, error) => const Icon(
+                                            Icons.flight,
+                                            size: 24,
+                                          ),
+                                    ),
+                                fit: BoxFit.contain,
+                              ),
+
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    formatTime(legSchedule['departure']['time']
-                                        .toString()),
+                                    formatTime(
+                                      legSchedule['departure']['time']
+                                          .toString(),
+                                    ),
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   Text(
-                                    '${legSchedule['departure']['city']} (${legSchedule['departure']['airport']})',
+                                    '${legSchedule['departure']['city']}',
                                     style: const TextStyle(
                                       color: TColors.grey,
                                       fontSize: 15,
@@ -253,18 +299,44 @@ class _FlightCardState extends State<FlightCard>
                                       fontSize: 14,
                                     ),
                                   ),
-                                  Stack(
-                                    alignment: Alignment.center,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
+                                      // Left circle
+                                      Container(
+                                        width: 10,
+                                        height: 10,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.grey.shade300,
+                                            width: 2,
+                                          ),
+                                          color: Colors.white,
+                                        ),
+                                      ),
+
+                                      // Line
                                       Container(
                                         height: 2,
-                                        width: 70,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                            0.4, // Adjust width as needed
                                         color: Colors.grey[300],
                                       ),
-                                      const Icon(
-                                        Icons.flight,
-                                        size: 20,
-                                        color: TColors.primary,
+
+                                      // Right circle
+                                      Container(
+                                        width: 10,
+                                        height: 10,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.grey.shade300,
+                                            width: 2,
+                                          ),
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -286,7 +358,9 @@ class _FlightCardState extends State<FlightCard>
                                     ),
                                   if (legSchedule['stops'].isNotEmpty)
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width * 0.4, // Limit width to 40% of screen
+                                      width:
+                                          MediaQuery.of(context).size.width *
+                                          0.4, // Limit width to 40% of screen
                                       child: Center(
                                         child: Text(
                                           legSchedule['stops'].join(', '),
@@ -300,22 +374,22 @@ class _FlightCardState extends State<FlightCard>
                                         ),
                                       ),
                                     ),
-
                                 ],
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    formatTime(legSchedule['arrival']['time']
-                                        .toString()),
+                                    formatTime(
+                                      legSchedule['arrival']['time'].toString(),
+                                    ),
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   Text(
-                                    '${legSchedule['arrival']['city']} (${legSchedule['arrival']['airport']})',
+                                    '${legSchedule['arrival']['city']}',
                                     style: const TextStyle(
                                       color: TColors.grey,
                                       fontSize: 15,
@@ -334,24 +408,28 @@ class _FlightCardState extends State<FlightCard>
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     GetX<FlightController>(
-                      builder: (controller) => Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: TColors.black.withOpacity(0.05),
-                          borderRadius: BorderRadius.circular(42),
-                          border:
-                              Border.all(color: TColors.black.withOpacity(0.3)),
-                        ),
-                        child: Text(
-                          '${controller.selectedCurrency.value} ${widget.flight.price.toStringAsFixed(0)}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: TColors.black,
+                      builder:
+                          (controller) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: TColors.black.withOpacity(0.05),
+                              borderRadius: BorderRadius.circular(42),
+                              border: Border.all(
+                                color: TColors.black.withOpacity(0.3),
+                              ),
+                            ),
+                            child: Text(
+                              '${controller.selectedCurrency.value} ${widget.flight.price.toStringAsFixed(0)}',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: TColors.black,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
                     ),
                   ],
                 ),
@@ -453,7 +531,10 @@ class _FlightCardState extends State<FlightCard>
   }
 
   Widget _buildFlightSegment(
-      Map<String, dynamic> schedule, int index, int totalSegments) {
+    Map<String, dynamic> schedule,
+    int index,
+    int totalSegments,
+  ) {
     // Get flight number and carrier from the schedule
     final carrier = schedule['carrier'] ?? {};
     final flightNumber =
@@ -468,8 +549,6 @@ class _FlightCardState extends State<FlightCard>
       segmentInfo = widget.flight.segmentInfo[index];
     }
 
-
-
     // Calculate layover time for segments within the same leg
     String? layoverTime;
 
@@ -480,9 +559,11 @@ class _FlightCardState extends State<FlightCard>
     // Find which leg this schedule belongs to
     for (var legSchedule in widget.flight.legSchedules) {
       final schedules = legSchedule['schedules'] as List;
-      final currentScheduleIndex = schedules.indexWhere((s) =>
-          s['departure']['time'] == schedule['departure']['time'] &&
-          s['arrival']['time'] == schedule['arrival']['time']);
+      final currentScheduleIndex = schedules.indexWhere(
+        (s) =>
+            s['departure']['time'] == schedule['departure']['time'] &&
+            s['arrival']['time'] == schedule['arrival']['time'],
+      );
 
       // If found and not the last schedule in this leg
       if (currentScheduleIndex != -1 &&
@@ -521,9 +602,10 @@ class _FlightCardState extends State<FlightCard>
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: index < totalSegments - 1
-                ? Colors.grey[300]!
-                : Colors.transparent,
+            color:
+                index < totalSegments - 1
+                    ? Colors.grey[300]!
+                    : Colors.transparent,
             width: 1,
           ),
         ),
@@ -534,12 +616,18 @@ class _FlightCardState extends State<FlightCard>
           // Flight number and carrier info
           Row(
             children: [
-              const Icon(Icons.flight_takeoff,
-                  size: 16, color: TColors.primary),
+              const Icon(
+                Icons.flight_takeoff,
+                size: 16,
+                color: TColors.primary,
+              ),
               const SizedBox(width: 8),
               Text(
                 ' Segment ${index + 1}',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
               ),
             ],
           ),
@@ -567,19 +655,24 @@ class _FlightCardState extends State<FlightCard>
                 imageUrl: airlineInfo.logoPath,
                 height: 24,
                 width: 24,
-                placeholder: (context, url) => const SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: Center(
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                ),
-                errorWidget: (context, url, error) => CachedNetworkImage(
-                  imageUrl: 'https://cdn-icons-png.flaticon.com/128/15700/15700374.png',
-                  height: 24,
-                  width: 24,
-                  errorWidget: (context, url, error) => const Icon(Icons.flight, size: 24),
-                ),
+                placeholder:
+                    (context, url) => const SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    ),
+                errorWidget:
+                    (context, url, error) => CachedNetworkImage(
+                      imageUrl:
+                          'https://cdn-icons-png.flaticon.com/128/15700/15700374.png',
+                      height: 24,
+                      width: 24,
+                      errorWidget:
+                          (context, url, error) =>
+                              const Icon(Icons.flight, size: 24),
+                    ),
                 fit: BoxFit.contain,
               ),
               const SizedBox(width: 8),
@@ -594,10 +687,7 @@ class _FlightCardState extends State<FlightCard>
           ),
           const SizedBox(height: 12),
 
-
-
           // Cabin Class information
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -606,7 +696,7 @@ class _FlightCardState extends State<FlightCard>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      schedule['departure']['city']?? "UNK",
+                      schedule['departure']['city'] ?? "UNK",
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     ),
                     Text(
@@ -632,8 +722,10 @@ class _FlightCardState extends State<FlightCard>
                 children: [
                   const Icon(Icons.flight, color: TColors.primary),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.green.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(4),
@@ -641,8 +733,11 @@ class _FlightCardState extends State<FlightCard>
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.restaurant_menu,
-                            size: 12, color: Colors.green),
+                        const Icon(
+                          Icons.restaurant_menu,
+                          size: 12,
+                          color: Colors.green,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           getMealInfo(segmentInfo?.mealCode ?? 'N'),
@@ -727,9 +822,7 @@ class _FlightCardState extends State<FlightCard>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.grey[300]!),
-        ),
+        border: Border(bottom: BorderSide(color: Colors.grey[300]!)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -738,10 +831,7 @@ class _FlightCardState extends State<FlightCard>
             children: [
               Icon(icon, size: 16, color: TColors.primary),
               const SizedBox(width: 8),
-              Text(
-                title,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
+              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
           const SizedBox(height: 8),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oneroof/views/hotel/hotel/guests/guests_controller.dart';
+import 'package:oneroof/views/hotel/hotel/hotel_date_controller.dart';
+import 'package:oneroof/views/hotel/search_hotels/search_hotel_controller.dart';
 import 'package:oneroof/views/introduce.dart';
 
 void main() {
@@ -12,6 +15,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() => GuestsController(), fenix: true);
+    Get.lazyPut(() => HotelDateController(), fenix: true);
+    Get.lazyPut(() => SearchHotelController(), fenix: true);
+
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -36,4 +43,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

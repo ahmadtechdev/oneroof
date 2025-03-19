@@ -27,7 +27,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
 
   List<Widget> _buildScreens() {
     return [
-      HomePage(),
+      HomeScreen(),
       const Center(child: Text('Search')),
       const Center(child: Text('Add')),
       const Center(child: Text('Notifications')),
