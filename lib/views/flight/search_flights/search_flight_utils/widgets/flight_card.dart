@@ -166,50 +166,50 @@ class _FlightCardState extends State<FlightCard>
               children: [
                 Row(
                   children: [
-                    for (var legSchedule in widget.flight.legSchedules)
-                      SingleChildScrollView(
+                    // Scrollable Flight Details
+                    Expanded(
+                      child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          width: MediaQuery.sizeOf(context).width/0.7,
-                          child: Row(
-                            children: [
-                              Column(
-                                children: [
-                                  Text(
-                                    widget.flight.airline,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
+                        child: Row(
+                          children: [
+                            for (var legSchedule in widget.flight.legSchedules)
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      widget.flight.airline,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    widget.flight.flightNumber,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
+                                    SizedBox(height: 2),
+                                    Text(
+                                      widget.flight.flightNumber,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                              SizedBox(width: 6),
-
-                            ],
-                          ),
+                          ],
                         ),
                       ),
+                    ),
+
+                    // Fixed Price Section
                     Column(
                       children: [
                         GetX<FlightController>(
-                          builder:
-                              (controller) => Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
+                          builder: (controller) => Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                             decoration: BoxDecoration(
                               color: TColors.black.withOpacity(0.05),
-                              borderRadius: BorderRadius.circular(42),
+                              borderRadius: BorderRadius.circular(32),
                               border: Border.all(
                                 color: TColors.black.withOpacity(0.3),
                               ),
@@ -217,10 +217,31 @@ class _FlightCardState extends State<FlightCard>
                             child: Text(
                               '${controller.selectedCurrency.value} ${widget.flight.price.toStringAsFixed(0)}',
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 color: TColors.black,
                               ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Add booking functionality here
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: TColors.primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                          ),
+                          child: Text(
+                            "Book Now",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -403,36 +424,7 @@ class _FlightCardState extends State<FlightCard>
                       ],
                     ),
                   ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GetX<FlightController>(
-                      builder:
-                          (controller) => Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              color: TColors.black.withOpacity(0.05),
-                              borderRadius: BorderRadius.circular(42),
-                              border: Border.all(
-                                color: TColors.black.withOpacity(0.3),
-                              ),
-                            ),
-                            child: Text(
-                              '${controller.selectedCurrency.value} ${widget.flight.price.toStringAsFixed(0)}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: TColors.black,
-                              ),
-                            ),
-                          ),
-                    ),
-                  ],
-                ),
+
               ],
             ),
           ),
