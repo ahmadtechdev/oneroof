@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oneroof/widgets/date_range_slector.dart';
+
 import '../../../../services/api_service_hotel.dart';
-import '../../../../widgets/colors.dart';
-import '../../../../widgets/custom_textfield.dart';
 import '../../../../widgets/loading_dailog.dart';
+import '../../../utility/colors.dart';
+import '../../../widgets/hotel_custom_textfield.dart';
 import '../search_hotels/search_hotel.dart';
 import '../search_hotels/search_hotel_controller.dart';
 import 'guests/guests_controller.dart';
@@ -92,7 +93,7 @@ class HotelForm extends StatelessWidget {
             ],
           ),
           child: Obx(
-            () => CustomDateRangeSelector(
+                () => CustomDateRangeSelector(
               dateRange: hotelDateController.dateRange.value,
               onDateRangeChanged: hotelDateController.updateDateRange,
               nights: hotelDateController.nights.value,
@@ -144,20 +145,20 @@ class HotelForm extends StatelessWidget {
               final guestsController = Get.find<GuestsController>();
 
               String checkInDate =
-                  hotelDateController.checkInDate.value.toIso8601String();
+              hotelDateController.checkInDate.value.toIso8601String();
               String checkOutDate =
-                  hotelDateController.checkOutDate.value.toIso8601String();
+              hotelDateController.checkOutDate.value.toIso8601String();
 
               // Create rooms array with the new structure
               List<Map<String, dynamic>> rooms = List.generate(
                 guestsController.roomCount.value,
-                (index) => {
+                    (index) => {
                   "RoomIdentifier": index + 1,
                   "Adult": guestsController.rooms[index].adults.value,
                   "Children": guestsController.rooms[index].children.value,
                   if (guestsController.rooms[index].children.value > 0)
                     "ChildrenAges":
-                        guestsController.rooms[index].childrenAges.toList(),
+                    guestsController.rooms[index].childrenAges.toList(),
                 },
               );
               print('the rooms is $rooms');

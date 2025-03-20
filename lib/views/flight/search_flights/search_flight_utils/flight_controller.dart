@@ -825,6 +825,18 @@ extension FlightDateTimeExtension on FlightController {
               scheduleWithDateTime['arrival']['dateTime'] =
                   _formatDateTimeWithoutMillis(arrivalDateTime);
 
+              // Extract airline information
+              final carrier = schedule['carrier'];
+              final airlineCode = carrier['marketing'] as String? ?? 'Unknown';
+              final ApiServiceFlight apiService = Get.put(ApiServiceFlight());
+              final airlineMap = apiService.getAirlineMap();
+              final airlineInfo = getAirlineInfo(airlineCode, airlineMap);
+
+              // Add airline information to the schedule
+              scheduleWithDateTime['airlineCode'] = airlineCode;
+              scheduleWithDateTime['airlineName'] = airlineInfo.name;
+              scheduleWithDateTime['airlineImg'] = airlineInfo.logoPath;
+
               currentLegSchedules.add(scheduleWithDateTime);
               allStopSchedules.add(scheduleWithDateTime);
 
@@ -846,6 +858,9 @@ extension FlightDateTimeExtension on FlightController {
                 'stops': currentLegStops,
                 'elapsedTime': legDesc['elapsedTime'],
                 'fareBasisCode': fareBasisCode, // This now has the correct fareBasisCode for each leg
+                'airlineCode': currentLegSchedules.first['airlineCode'], // Add airline code
+                'airlineName': currentLegSchedules.first['airlineName'], // Add airline name
+                'airlineImg': currentLegSchedules.first['airlineImg'], // Add airline name
               });
             }
 
@@ -948,7 +963,6 @@ extension FlightDateTimeExtension on FlightController {
       }
     }
   }
-
   // Helper method to determine cabin code from brand information
   String _getCabinCodeFromBrandInfo(Map<String, dynamic> brandInfo) {
     final description = (brandInfo['brandDescription'] ?? '').toString().toUpperCase();
